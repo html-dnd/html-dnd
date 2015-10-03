@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test page for html-dnd</title>
+  <style>
+    #draggable {
+      background-color: white;
+      border: 1px solid grey;
+      width: 120px;
+      height: 80px;
+    }
+
+    #droppable {
+      border: 1px solid grey;
+      background-color: lightgray;
+      color: gray;
+      width: 240px;
+      height: 160px;
+    }
+
+    #droppable.active {
+      background-color: lightyellow;
+    }
+  </style>
+</head>
+<body>
+  <div id="droppable">Droppable</div>
+  <div id="draggable" draggable="true">Draggable</div>
+  <div id="result">NG</div>
+  <script>
+    var draggable = document.getElementById('draggable');
+    draggable.setAttribute('draggable', 'true');
+
+    var droppable = document.getElementById('droppable');
+    var result = document.getElementById('result');
+
+    draggable.addEventListener('dragstart', function(dragstartEvent) {
+      // Change cursor for dragover
+      dragstartEvent.dataTransfer.effectAllowed = 'move';
+
+      // Firefox does not handle it if no data
+      dragstartEvent.dataTransfer.setData('text/plain', 'example');
+
+      droppable.className = 'active';
+    }, false);
+
+    draggable.addEventListener('dragend', function() {
+      droppable.className = '';
+    }, false);
+
+    droppable.addEventListener('dragover', function(dragoverEvent) {
+      // Allow to drop here
+      if (dragoverEvent.preventDefault) dragoverEvent.preventDefault();
+
+      // Change cursor for dragover
+      dragoverEvent.dataTransfer.dropEffect = 'move';
+    }, false);
+
+    droppable.addEventListener('dragenter', function () {
+      this.className = 'over';
+    }, false);
+
+    droppable.addEventListener('drop', function(dropEvent) {
+      // Prevent redirecting on Firefox
+      if (dropEvent.preventDefault) dropEvent.preventDefault();
+
+      result.textContent = 'OK';
+      document.body.removeChild(draggable);
+    }, false);
+  </script>
+</body>
+</html>
