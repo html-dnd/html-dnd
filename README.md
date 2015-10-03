@@ -1,5 +1,7 @@
 HTML Drag and Drop Simulator
 ============================
+[![Circle CI](https://circleci.com/gh/Kuniwak/html-dnd.svg?style=shield)](https://circleci.com/gh/Kuniwak/html-dnd)
+[![npm version](https://badge.fury.io/js/html-dnd.svg)](http://badge.fury.io/js/html-dnd)
 
 [HTML Drag and Drop](https://html.spec.whatwg.org/multipage/interaction.html#dnd) Simulator for E2E testing.
 
@@ -14,6 +16,11 @@ Install
 ```shell
 npm install --save-dev html-dnd
 ```
+
+
+Compatibility
+-------------
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/html-dnd.svg)](https://saucelabs.com/u/html-dnd)
 
 
 Usage
@@ -81,4 +88,4 @@ See also
 License
 -------
 
-MIT
+MIT (c) 2015 Kuniwak
