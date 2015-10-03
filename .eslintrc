@@ -1,0 +1,11 @@
+{
+    "rules": {
+        "indent": 0,
+        "quotes": 0,
+        "linebreak-style": 0,
+        "semi": 0,
+        "no-unused-vars": [2, { "args": "none" }]
+    },
+    "env": {},
+    "extends": "eslint:recommended"
+}
