@@ -41,7 +41,7 @@ driver.get('http://example.com');
 var draggable = driver.findElement(By.id('draggable'));
 var droppable = driver.findElement(By.id('droppable'));
 
-driver.execute(dragAndDrop, draggable, droppable);
+driver.executeScript(dragAndDrop, draggable, droppable);
 
 driver.quit();
 ```
