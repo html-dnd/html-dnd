@@ -14,6 +14,8 @@ var before = testing.before;
 var after = testing.after;
 var it = testing.it;
 
+require('dotenv').config({silent: true});
+
 var BASE_CAPABILITY = {
   name: 'html-dnd E2E Tests',
   username: process.env.SAUCE_USERNAME,
@@ -34,10 +36,10 @@ var Capabilities = [
     platform: 'OS X 10.10'
   },
   // SKIP: It raise "UnknownError: unknown error"
-  // {
-  //   browserName: 'microsoftedge',
-  //   platform: 'Windows 10'
-  // },
+  {
+    browserName: 'microsoftedge',
+    platform: 'Windows 10'
+  },
   {
     browserName: 'internet explorer',
     platform: 'Windows 8.1'
@@ -53,8 +55,6 @@ var Capabilities = [
 
 describe('html-dnd', function() {
   Capabilities.forEach(function(capability) {
-    var driver;
-
     var testCaseName = util.format(
       'on %s %s (%s)',
       capability.browserName,
@@ -63,6 +63,8 @@ describe('html-dnd', function() {
     );
 
     describe(testCaseName, function() {
+      var driver;
+
       before(function() {
         driver = new webdriver.Builder().
           usingServer(SAUCELABS_URL).
@@ -71,7 +73,7 @@ describe('html-dnd', function() {
       });
 
       describe('.code', function() {
-        it('should can drag and drop', function() {
+        it('should can drag and drop with 2 WebElements', function() {
           driver.get(TEST_PAGE_URL);
 
           var draggable = driver.findElement(By.id('draggable'));
@@ -87,7 +89,7 @@ describe('html-dnd', function() {
         });
       });
 
-      describe('.codeForSelectors', function() {
+      describe('.codeForSelectors with 2 CSS Selectors', function() {
         it('should can drag and drop', function() {
           driver.get(TEST_PAGE_URL);
 

@@ -13,6 +13,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "chromedriver": "^2.19.0",
+    "dotenv": "^2.0.0",
     "eslint": "^1.6.0",
     "jscs": "^2.2.1",
     "karma": "^0.13.3",
@@ -30,9 +31,9 @@
   },
   "scripts": {
     "pretest": "npm run lint",
-    "lint": "eslint src lib tests && jscs src lib tests",
-    "local-test": "mocha tests/unit/node && karma start karma.conf.js && mocha tests/e2e/html_dnd.js",
-    "test": "mocha tests/unit/node && karma start karma.conf-ci.js && mocha --opts tests/e2e/mocha.opts tests/e2e"
+    "lint": "eslint src lib test && jscs src lib test",
+    "local-test": "mocha test/unit/node && karma start karma.conf.js && mocha test/e2e/html_dnd.js",
+    "test": "mocha test/unit/node && karma start karma.conf-ci.js && mocha test/e2e"
   },
   "author": "Kuniwak",
   "license": "MIT",
@@ -40,7 +41,7 @@
     "multiline": "^1.0.2"
   },
   "directories": {
-    "test": "tests"
+    "test": "test"
   },
   "repository": {
     "type": "git",
