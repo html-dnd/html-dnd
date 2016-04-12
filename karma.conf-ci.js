@@ -1,4 +1,5 @@
 /* eslint-env node */
+require('dotenv').config({silent: true});
 
 module.exports = function(config) {
   // Example set of browsers to run on Sauce Labs
@@ -38,7 +39,7 @@ module.exports = function(config) {
     basePath: '',
     files: [
       'src/**/*.js',
-      'tests/unit/browser/**/*.js'
+      'test/unit/browser/**/*.js'
     ],
     exclude: [],
     frameworks: ['mocha', 'chai'],

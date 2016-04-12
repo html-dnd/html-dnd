@@ -5,7 +5,7 @@ module.exports = function(config) {
     basePath: '',
     files: [
       'src/**/*.js',
-      'tests/unit/browser/**/*.js'
+      'test/unit/browser/**/*.js'
     ],
     exclude: [],
     frameworks: ['mocha', 'chai'],
