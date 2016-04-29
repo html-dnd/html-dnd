@@ -56,7 +56,7 @@ module.exports = {
   'drag and drop': function(browser) {
     browser
       .url('http://example.com')
-      .execute(dragAndDrop, '#draggable', '#droppable')
+      .execute(dragAndDrop, ['#draggable', '#droppable'])
       .end();
   }
 };
