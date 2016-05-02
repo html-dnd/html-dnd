@@ -33,7 +33,7 @@
     "pretest": "npm run lint",
     "lint": "eslint src lib test && jscs src lib test",
     "local-test": "mocha test/unit/node && karma start karma.conf.js && mocha test/e2e/html_dnd.js",
-    "test": "mocha test/unit/node && karma start karma.conf-ci.js && mocha test/e2e"
+    "test": "mocha test/unit/node/**/*.js && karma start karma.conf-ci.js && mocha test/e2e/**/*.js"
   },
   "author": "Kuniwak",
   "license": "MIT",
