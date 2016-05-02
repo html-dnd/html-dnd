@@ -27,13 +27,18 @@
     "karma-sauce-launcher": "^0.3.1",
     "lodash": "^4.10.0",
     "mocha": "^2.4.5",
+    "npm-run-all": "^1.8.0",
     "selenium-webdriver": "^2.53.1"
   },
   "scripts": {
     "pretest": "npm run lint",
-    "lint": "eslint src lib test && jscs src lib test",
-    "local-test": "mocha test/unit/node && karma start karma.conf.js && mocha test/e2e/html_dnd.js",
-    "test": "mocha test/unit/node/**/*.js && karma start karma.conf-ci.js && mocha test/e2e/**/*.js"
+    "lint": "npm-run-all lint:*",
+    "lint:style": "jscs src lib test",
+    "lint:problem": "eslint src lib test",
+    "unit:node": "mocha test/unit/node/**/*.js",
+    "unit:browser": "karma start karma.conf.js",
+    "e2e:selenium-webdriver": "mocha test/e2e/selenium-webdriver/**/*.js",
+    "test": "npm-run-all unit:* e2e:*"
   },
   "author": "Kuniwak",
   "license": "MIT",
