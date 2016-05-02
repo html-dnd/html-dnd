@@ -1,4 +1,4 @@
-var dragAndDrop = require('../../lib/index.js');
+var dragAndDrop = require('../../../lib/index.js');
 var webdriver = require('selenium-webdriver');
 var By = webdriver.By;
 
