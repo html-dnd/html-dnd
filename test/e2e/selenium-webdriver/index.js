@@ -35,7 +35,6 @@ var Capabilities = [
     browserName: 'safari',
     platform: 'OS X 10.10'
   },
-  // SKIP: It raise "UnknownError: unknown error"
   {
     browserName: 'microsoftedge',
     platform: 'Windows 10'
