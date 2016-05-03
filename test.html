@@ -22,12 +22,31 @@
     #droppable.active {
       background-color: lightyellow;
     }
+
+    .log {
+      color: red;
+    }
   </style>
 </head>
 <body>
   <div id="droppable">Droppable</div>
   <div id="draggable" draggable="true">Draggable</div>
+
+  <h5>Test result</h5>
   <div id="result">NG</div>
+
+  <h5>Error logs</h5>
+  <div id="log"></div>
+
+  <script>
+    window.onerror = function(msg, srouce, lineno, colno, error) {
+      var pre = document.createElement('pre');
+      pre.className = 'log';
+      pre.textContent = error && error.stack ? error.stack : msg;
+      document.getElementById('log').appendChild(pre);
+    };
+  </script>
+
   <script>
     var draggable = document.getElementById('draggable');
     draggable.setAttribute('draggable', 'true');
