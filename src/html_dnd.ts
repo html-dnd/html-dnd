@@ -7,14 +7,16 @@ namespace dnd {
     // For the dragstart event. New data can be added to the drag data store.
     store.mode = "readwrite";
 
-    const dragstartEvent = createEventWithDataTransfer("dragstart", store);
+    const dataTransfer = new DataTransfer(store);
+
+    const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer);
     draggable.dispatchEvent(dragstartEvent);
 
     // For the drop event. The list of items representing dragged data can be
     // read, including the data. No new data can be added.
     store.mode = "readonly";
 
-    const dropEvent = createEventWithDataTransfer("drop", store);
+    const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
     droppable.dispatchEvent(dropEvent);
 
     // For all other events. The formats and kinds in the drag data store list
@@ -22,7 +24,7 @@ namespace dnd {
     // is unavailable and no new data can be added.
     store.mode = "protected";
 
-    const dragendEvent = createEventWithDataTransfer("dragend", store);
+    const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
     draggable.dispatchEvent(dragendEvent);
   }
 
@@ -30,10 +32,10 @@ namespace dnd {
   /**
    * Creates an event instance with a DataTransfer.
    */
-  function createEventWithDataTransfer(type: string, store: DragDataStore): DragEvent {
+  function createEventWithDataTransfer(type: string, dataTransfer: DataTransfer): DragEvent {
     const event = <any> document.createEvent("CustomEvent");
     event.initCustomEvent(type, true, true, null);
-    event.dataTransfer = new DataTransfer(store);
+    event.dataTransfer = dataTransfer;
     return event;
   }
 
