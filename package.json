@@ -1,6 +1,6 @@
 {
   "name": "html-dnd",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "HTML Drag and Drop Simulator for E2E testing",
   "keywords": [
     "drag",
@@ -37,11 +37,9 @@
   "scripts": {
     "build": "npm-run-all build:*",
     "build:typescript": "tsc",
-
     "lint": "npm-run-all lint:*",
     "lint:js": "eslint lib test",
     "lint:typescript": "tslint src/**/*.ts",
-
     "pretest": "npm-run-all lint build",
     "test": "npm-run-all unit:* e2e:*",
     "unit:node": "mocha test/unit/node/**/*.js",
