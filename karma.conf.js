@@ -38,7 +38,7 @@ module.exports = function(config) {
   config.set({
     basePath: '',
     files: [
-      'src/**/*.js',
+      'dist/**/*.js',
       'test/unit/browser/**/*.js'
     ],
     exclude: [],

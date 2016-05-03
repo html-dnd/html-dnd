@@ -65,10 +65,10 @@ describe('html-dnd', function() {
       var driver;
 
       before(function() {
-        driver = new webdriver.Builder().
-          usingServer(SAUCELABS_URL).
-          withCapabilities(capability).
-          build();
+        driver = new webdriver.Builder()
+          .usingServer(SAUCELABS_URL)
+          .withCapabilities(capability)
+          .build();
       });
 
       describe('.code', function() {
@@ -78,11 +78,15 @@ describe('html-dnd', function() {
           var draggable = driver.findElement(By.id('draggable'));
           var droppable = driver.findElement(By.id('droppable'));
 
-          driver.executeScript(dragAndDrop.code, draggable, droppable);
+          return webdriver.promise.all([
+              driver.executeScript(dragAndDrop.code, draggable, droppable),
+              driver.findElement(By.id('result')).getText()
+            ])
+            .then(function(tuple) {
+              var result = tuple[0];
+              assert.isNull(result);
 
-          return driver.findElement(By.id('result'))
-            .getText()
-            .then(function(text) {
+              var text = tuple[1];
               assert.strictEqual(text, 'OK');
             });
         });
@@ -92,12 +96,17 @@ describe('html-dnd', function() {
         it('should can drag and drop', function() {
           driver.get(TEST_PAGE_URL);
 
-          driver.executeScript(dragAndDrop.codeForSelectors,
-                               '#draggable', '#droppable');
+          return webdriver.promise
+            .all([
+              driver.executeScript(
+                dragAndDrop.codeForSelectors, '#draggable', '#droppable'),
+              driver.findElement(By.id('result')).getText()
+            ])
+            .then(function(tuple) {
+              var result = tuple[0];
+              assert.isNull(result);
 
-          return driver.findElement(By.id('result'))
-            .getText()
-            .then(function(text) {
+              var text = tuple[1];
               assert.strictEqual(text, 'OK');
             });
         });
