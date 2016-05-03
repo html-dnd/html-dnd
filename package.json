@@ -30,18 +30,26 @@
     "npm-run-all": "^1.8.0",
     "phantomjs-prebuilt": "^2.1.7",
     "selenium-server-standalone-jar": "2.53.0",
-    "selenium-webdriver": "^2.53.1"
+    "selenium-webdriver": "^2.53.1",
+    "tslint": "^3.8.1",
+    "typescript": "^1.8.10",
+    "typings": "^0.8.1"
   },
   "scripts": {
-    "pretest": "npm run lint",
+    "build": "npm-run-all build:*",
+    "build:typescript": "tsc",
+
     "lint": "npm-run-all lint:*",
     "lint:style": "jscs src lib test",
-    "lint:problem": "eslint src lib test",
+    "lint:js": "eslint lib test",
+    "lint:typescript": "tslint src/**/*.ts",
+
+    "pretest": "npm-run-all lint build",
+    "test": "npm-run-all unit:* e2e:*",
     "unit:node": "mocha test/unit/node/**/*.js",
     "unit:browser": "karma start karma.conf.js",
     "e2e:selenium-webdriver": "mocha test/e2e/selenium-webdriver/**/*.js",
-    "e2e:nightwatch": "nightwatch --config test/e2e/nightwatch/nightwatch.json",
-    "test": "npm-run-all unit:* e2e:*"
+    "e2e:nightwatch": "nightwatch --config test/e2e/nightwatch/nightwatch.json"
   },
   "author": "Kuniwak",
   "license": "MIT",
