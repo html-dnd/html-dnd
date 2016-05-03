@@ -14,7 +14,6 @@
     "chai": "^3.5.0",
     "dotenv": "^2.0.0",
     "eslint": "^2.7.0",
-    "jscs": "^2.11.0",
     "karma": "^0.13.22",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.2.3",
@@ -40,7 +39,6 @@
     "build:typescript": "tsc",
 
     "lint": "npm-run-all lint:*",
-    "lint:style": "jscs src lib test",
     "lint:js": "eslint lib test",
     "lint:typescript": "tslint src/**/*.ts",
 
