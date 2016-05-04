@@ -111,6 +111,26 @@ describe('html-dnd', function() {
             });
         });
       });
+      
+      describe('.codeForSelectors with 2 XPath Selectors', function() {
+        it('should can drag and drop', function() {
+          driver.get(TEST_PAGE_URL);
+
+          return webdriver.promise
+            .all([
+              driver.executeScript(
+                dragAndDrop.codeForSelectors, '//*[@id="draggable"]', '//*[@id="droppable"]', true),
+              driver.findElement(By.id('result')).getText()
+            ])
+            .then(function(tuple) {
+              var result = tuple[0];
+              assert.isNull(result);
+
+              var text = tuple[1];
+              assert.strictEqual(text, 'OK');
+            });
+        });
+      });
 
       after(function() {
         return driver.quit();
