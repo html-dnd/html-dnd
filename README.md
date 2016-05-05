@@ -85,7 +85,13 @@ See also
 - [Issue 3604: HTML5 Drag and Drop with Selenium Webdriver](https://code.google.com/p/selenium/issues/detail?id=3604)
 
 
+Donation
+--------
+
+[![Click here to lend your support to: Donation to html-dnd and make a donation at pledgie.com !](https://pledgie.com/campaigns/31629.png?skin_name=chrome)](https://pledgie.com/campaigns/31629)
+
+
 License
 -------
 
-MIT (c) 2015 Kuniwak
+[MIT (c) 2015 Kuniwak](https://github.com/Kuniwak/html-dnd/blob/master/LICENSE.md)
