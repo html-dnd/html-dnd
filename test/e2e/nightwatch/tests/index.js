@@ -1,11 +1,11 @@
-var dragAndDrop = require('../../../../lib/index').codeForSelectors;
+var dragAndDrop = require('../../../../lib/index');
 
 module.exports = {
   'Drag and Drop with Nightwatch using CSS selectors': function(browser) {
     browser
       .url('https://kuniwak.github.io/html-dnd/test.html')
       .assert.containsText('#result', 'NG')
-      .execute(dragAndDrop, ['#draggable', '#droppable'])
+      .execute(dragAndDrop.codeForSelectors, ['#draggable', '#droppable'])
       .assert.containsText('#result', 'OK')
       .end();
   },
@@ -13,7 +13,7 @@ module.exports = {
     browser
       .url('https://kuniwak.github.io/html-dnd/test.html')
       .assert.containsText('#result', 'NG')
-      .execute(dragAndDrop, ['//*[@id="draggable"]', '//*[@id="droppable"]', true])
+      .execute(dragAndDrop.codeForXPaths, ['//*[@id="draggable"]', '//*[@id="droppable"]'])
       .assert.containsText('#result', 'OK')
       .end();
   }

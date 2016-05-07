@@ -119,7 +119,7 @@ describe('html-dnd', function() {
           return webdriver.promise
             .all([
               driver.executeScript(
-                dragAndDrop.codeForSelectors, '//*[@id="draggable"]', '//*[@id="droppable"]', true),
+                dragAndDrop.codeForXPaths, '//*[@id="draggable"]', '//*[@id="droppable"]'),
               driver.findElement(By.id('result')).getText()
             ])
             .then(function(tuple) {
