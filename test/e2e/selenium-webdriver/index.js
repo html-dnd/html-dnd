@@ -124,8 +124,8 @@ describe('html-dnd', function() {
       describe('.codeForSelectors with 2 XPath Selectors', function() {
         it('should can drag and drop', function() {
           driver.get(TEST_PAGE_URL);
-			
-		  useXPathPolyfill(driver);
+
+          useXPathPolyfill(driver);
 
           return webdriver.promise
             .all([
