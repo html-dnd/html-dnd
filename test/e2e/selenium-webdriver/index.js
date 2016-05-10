@@ -14,6 +14,15 @@ var before = testing.before;
 var after = testing.after;
 var it = testing.it;
 
+var Fs = require('fs');
+var Path = require('path');
+
+function useXPathPolyfill(driver) {
+  var WGXPATH_INSTALLER_PATH = Path.resolve(__dirname, '../assets/wgxpath.install.1.3.0.js');
+  driver.executeScript(Fs.readFileSync(WGXPATH_INSTALLER_PATH, 'utf8'));
+  driver.executeScript('wgxpath.install();');
+}
+
 require('dotenv').config({silent: true});
 
 var BASE_CAPABILITY = {
@@ -115,6 +124,8 @@ describe('html-dnd', function() {
       describe('.codeForSelectors with 2 XPath Selectors', function() {
         it('should can drag and drop', function() {
           driver.get(TEST_PAGE_URL);
+			
+		  useXPathPolyfill(driver);
 
           return webdriver.promise
             .all([
