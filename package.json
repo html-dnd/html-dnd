@@ -1,6 +1,6 @@
 {
   "name": "html-dnd",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "HTML Drag and Drop Simulator for E2E testing",
   "keywords": [
     "drag",
