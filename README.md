@@ -79,6 +79,15 @@ client
 ```
 
 
+### With Typescript
+
+```typescript
+import {code as dragAndDrop} from 'html-dnd';
+
+driver.executeScript(dragAndDrop, draggable, droppable);
+```
+
+
 See also
 --------
 

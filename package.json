@@ -63,5 +63,6 @@
   "bugs": {
     "url": "https://github.com/Kuniwak/html-dnd/issues"
   },
+  "typings": "html-dnd.d.ts",
   "homepage": "https://github.com/Kuniwak/html-dnd#readme"
 }
