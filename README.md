@@ -97,4 +97,4 @@ See also
 License
 -------
 
-MIT (c) 2015 Kuniwak
+MIT (c) 2017 Kuniwak
