@@ -16,6 +16,9 @@ namespace dnd {
     // read, including the data. No new data can be added.
     store.mode = "readonly";
 
+    const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
+    droppable.dispatchEvent(dragOverEvent);
+
     const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
     droppable.dispatchEvent(dropEvent);
 
