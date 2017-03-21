@@ -30,8 +30,10 @@ namespace dnd {
         // is unavailable and no new data can be added.
         store.mode = "protected";
 
-        const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
-        draggable.dispatchEvent(dragendEvent);
+        setTimeout(() => {
+          const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
+          draggable.dispatchEvent(dragendEvent);
+        }, DISPATCH_TIMEOUT);
       }, DISPATCH_TIMEOUT);
     }, DISPATCH_TIMEOUT);
   }
