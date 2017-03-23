@@ -2,10 +2,15 @@ namespace dnd {
   "use strict";
 
 
-  export function simulate(draggable: Element, droppable: Element, xOffset: number, yOffset: number): void {
+  export function simulate(draggable: Element, droppable: Element, xOffset: number = 0, yOffset: number = 0): void {
     const store = new DragDataStore();
     // For the dragstart event. New data can be added to the drag data store.
     store.mode = "readwrite";
+
+    // Adjust the drop location based on target element offset
+    const elementPosition = droppable.getBoundingClientRect();
+    xOffset = elementPosition.left;
+    yOffset += elementPosition.top;
 
     const dataTransfer = new DataTransfer(store);
 
@@ -36,8 +41,8 @@ namespace dnd {
    * Creates an event instance with a DataTransfer.
    */
   function createEventWithDataTransfer(type: string, dataTransfer: DataTransfer, ...eventData: any[]): DragEvent {
-    const event = <any>document.createEvent("CustomEvent");
-    event.initCustomEvent(type, true, true, null, ...eventData);
+    const event = <any>document.createEvent("MouseEvent");
+    event.initMouseEvent(type, true, true, window, ...eventData);
     event.dataTransfer = dataTransfer;
     return event;
   }
@@ -450,8 +455,6 @@ namespace dnd {
     }
   }
 
-
-
   /**
    * While the DataTransferItem object's DataTransfer object is associated with
    * a drag data store and that drag data store's drag data store item list
@@ -618,5 +621,5 @@ namespace dnd {
       // limitations.
       return line[0] !== "#";
     });
-  };
+  }
 }
