@@ -1,20 +1,21 @@
 namespace dnd {
   "use strict";
 
+  export interface DndSimulateConfig {
+    dragOffset?: Array<number>;
+    dropOffset?: Array<number>;
+  }
 
-  export function simulate(draggable: Element, droppable: Element, xOffset: number = 0, yOffset: number = 0): void {
+  export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig): void {
+    const {dragX, dragY, dropX, dropY} = calculateMousePositions(draggable, droppable, dndSimulateConfig);
+
     const store = new DragDataStore();
     // For the dragstart event. New data can be added to the drag data store.
     store.mode = "readwrite";
 
-    // Adjust the drop location based on target element offset
-    const elementPosition = droppable.getBoundingClientRect();
-    xOffset = elementPosition.left;
-    yOffset += elementPosition.top;
-
     const dataTransfer = new DataTransfer(store);
 
-    const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer);
+    const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer, 0, 0, 0, dragX, dragY, false, false, false, false, 0, null);
     draggable.dispatchEvent(dragstartEvent);
 
     // For the drop event. The list of items representing dragged data can be
@@ -24,7 +25,7 @@ namespace dnd {
     const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
     droppable.dispatchEvent(dragOverEvent);
 
-    const dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, xOffset, yOffset, false, false, false, false, 0, null);
+    const dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
     droppable.dispatchEvent(dropEvent);
 
     // For all other events. The formats and kinds in the drag data store list
@@ -36,6 +37,46 @@ namespace dnd {
     draggable.dispatchEvent(dragendEvent);
   }
 
+  export interface MousePositions {
+    dragX: number;
+    dragY: number;
+    dropX: number;
+    dropY: number;
+  }
+
+  /**
+   * Calculate the mouse position for drag and drop operations
+   */
+  function calculateMousePositions(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig): MousePositions {
+    const dragElementPosition = draggable.getBoundingClientRect();
+    const dropElementPosition = droppable.getBoundingClientRect();
+
+    let dragX = dragElementPosition.left;
+    let dragY = dragElementPosition.top;
+
+    let dropX = dropElementPosition.left;
+    let dropY = dropElementPosition.top;
+
+    if (dndSimulateConfig && dndSimulateConfig.dragOffset) {
+      dragX += dndSimulateConfig.dragOffset[0];
+      dragY += dndSimulateConfig.dragOffset[1];
+    }
+    else {
+      dragX += (dragElementPosition.width / 2);
+      dragY += (dragElementPosition.height / 2);
+    }
+
+    if (dndSimulateConfig && dndSimulateConfig.dropOffset) {
+      dropX += dndSimulateConfig.dropOffset[0];
+      dropY += dndSimulateConfig.dropOffset[1];
+    }
+    else {
+      dropX += (dropElementPosition.width / 2);
+      dropY += (dropElementPosition.height / 2);
+    }
+
+    return {dragX, dragY, dropX, dropY};
+  }
 
   /**
    * Creates an event instance with a DataTransfer.
