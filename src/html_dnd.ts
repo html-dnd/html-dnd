@@ -7,7 +7,7 @@ namespace dnd {
   }
 
   export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig): void {
-    const {dragX, dragY, dropX, dropY} = calculateMousePositions(draggable, droppable, dndSimulateConfig);
+    const dragPosition = calculateMousePositions(draggable, dndSimulateConfig && dndSimulateConfig.dragOffset);
 
     const store = new DragDataStore();
     // For the dragstart event. New data can be added to the drag data store.
@@ -15,17 +15,22 @@ namespace dnd {
 
     const dataTransfer = new DataTransfer(store);
 
-    const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer, 0, 0, 0, dragX, dragY, false, false, false, false, 0, null);
+    const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer, 0, 0, 0, dragPosition.x, dragPosition.y, false, false, false, false, 0, null);
     draggable.dispatchEvent(dragstartEvent);
+
+    const dragOverEvent1 = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dragPosition.x, dragPosition.y, false, false, false, false, 0, null);
+    draggable.dispatchEvent(dragOverEvent1);
+
+    const dropPosition = calculateMousePositions(droppable, dndSimulateConfig && dndSimulateConfig.dropOffset);
+
+    const dragOverEvent2 = createEventWithDataTransfer("dragover", dataTransfer, 0, 0, 0, dropPosition.x, dropPosition.y, false, false, false, false, 0, null);
+    droppable.dispatchEvent(dragOverEvent2);
 
     // For the drop event. The list of items representing dragged data can be
     // read, including the data. No new data can be added.
     store.mode = "readonly";
 
-    const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
-    droppable.dispatchEvent(dragOverEvent);
-
-    const dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
+    const dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropPosition.x, dropPosition.y, false, false, false, false, 0, null);
     droppable.dispatchEvent(dropEvent);
 
     // For all other events. The formats and kinds in the drag data store list
@@ -33,49 +38,34 @@ namespace dnd {
     // is unavailable and no new data can be added.
     store.mode = "protected";
 
-    const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
+    const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer, 0, 0, 0, dropPosition.x, dropPosition.y, false, false, false, false, 0, null);
     draggable.dispatchEvent(dragendEvent);
   }
 
   export interface MousePositions {
-    dragX: number;
-    dragY: number;
-    dropX: number;
-    dropY: number;
+    x: number;
+    y: number;
   }
 
   /**
    * Calculate the mouse position for drag and drop operations
    */
-  function calculateMousePositions(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig): MousePositions {
-    const dragElementPosition = draggable.getBoundingClientRect();
-    const dropElementPosition = droppable.getBoundingClientRect();
+  function calculateMousePositions(element: Element, offset?: Array<number>): MousePositions {
+    const position = element.getBoundingClientRect();
 
-    let dragX = dragElementPosition.left;
-    let dragY = dragElementPosition.top;
+    let x = position.left;
+    let y = position.top;
 
-    let dropX = dropElementPosition.left;
-    let dropY = dropElementPosition.top;
-
-    if (dndSimulateConfig && dndSimulateConfig.dragOffset) {
-      dragX += dndSimulateConfig.dragOffset[0];
-      dragY += dndSimulateConfig.dragOffset[1];
+    if (offset) {
+      x += offset[0];
+      y += offset[1];
     }
     else {
-      dragX += (dragElementPosition.width / 2);
-      dragY += (dragElementPosition.height / 2);
+      x += (position.width / 2);
+      y += (position.height / 2);
     }
 
-    if (dndSimulateConfig && dndSimulateConfig.dropOffset) {
-      dropX += dndSimulateConfig.dropOffset[0];
-      dropY += dndSimulateConfig.dropOffset[1];
-    }
-    else {
-      dropX += (dropElementPosition.width / 2);
-      dropY += (dropElementPosition.height / 2);
-    }
-
-    return {dragX, dragY, dropX, dropY};
+    return { x, y };
   }
 
   /**
