@@ -20,18 +20,22 @@ namespace dnd {
   
       const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
       droppable.dispatchEvent(dragOverEvent);
-  
-      const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
-      droppable.dispatchEvent(dropEvent);
-  
-      // For all other events. The formats and kinds in the drag data store list
-      // of items representing dragged data can be enumerated, but the data itself
-      // is unavailable and no new data can be added.
-      store.mode = "protected";
-  
-      const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
-      draggable.dispatchEvent(dragendEvent);
+      
+      setTimeout(() => {
+        const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
+        droppable.dispatchEvent(dropEvent);
+
+        // For all other events. The formats and kinds in the drag data store list
+        // of items representing dragged data can be enumerated, but the data itself
+        // is unavailable and no new data can be added.
+        store.mode = "protected";
+    
+        setTimeout(() => {
+          const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
+          draggable.dispatchEvent(dragendEvent);
+        }, 0);
       }, 0);
+    }, 0);
   }
 
 
