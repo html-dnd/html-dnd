@@ -12,23 +12,26 @@ namespace dnd {
     const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer);
     draggable.dispatchEvent(dragstartEvent);
 
-    // For the drop event. The list of items representing dragged data can be
-    // read, including the data. No new data can be added.
-    store.mode = "readonly";
-
-    const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
-    droppable.dispatchEvent(dragOverEvent);
-
-    const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
-    droppable.dispatchEvent(dropEvent);
-
-    // For all other events. The formats and kinds in the drag data store list
-    // of items representing dragged data can be enumerated, but the data itself
-    // is unavailable and no new data can be added.
-    store.mode = "protected";
-
-    const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
-    draggable.dispatchEvent(dragendEvent);
+    // Handing over the dragover and drop event to the event queue.
+    setTimeout(() => {
+      // For the drop event. The list of items representing dragged data can be
+      // read, including the data. No new data can be added.
+      store.mode = "readonly";
+  
+      const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
+      droppable.dispatchEvent(dragOverEvent);
+  
+      const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
+      droppable.dispatchEvent(dropEvent);
+  
+      // For all other events. The formats and kinds in the drag data store list
+      // of items representing dragged data can be enumerated, but the data itself
+      // is unavailable and no new data can be added.
+      store.mode = "protected";
+  
+      const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
+      draggable.dispatchEvent(dragendEvent);
+      }, 0);
   }
 
 
