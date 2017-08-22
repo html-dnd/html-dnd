@@ -13,12 +13,12 @@ namespace dnd {
 
     setTimeout(() => {
       // Simulate dragenter
-      const dragOverEvent = createEventWithDataTransfer("dragenter", dataTransfer);
-      droppable.dispatchEvent(dragOverEvent);
+      store.mode = "readonly";
+      const dragEnterEvent = createEventWithDataTransfer("dragenter", dataTransfer);
+      droppable.dispatchEvent(dragEnterEvent);
       setTimeout(() => {
         // For the drop event. The list of items representing dragged data can be
         // read, including the data. No new data can be added.
-        store.mode = "readonly";
   
         const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
         droppable.dispatchEvent(dragOverEvent);
