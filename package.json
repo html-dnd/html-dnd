@@ -11,6 +11,7 @@
   ],
   "main": "lib/index.js",
   "devDependencies": {
+    "babel-eslint": "^8.0.3",
     "chai": "^3.5.0",
     "dotenv": "^2.0.0",
     "eslint": "^2.7.0",
