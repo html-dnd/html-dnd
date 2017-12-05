@@ -1,15 +1,21 @@
 namespace dnd {
   "use strict";
 
+  export interface DndSimulateConfig {
+    dragOffset?: Array<number>;
+    dropOffset?: Array<number>;
+  }
 
-  export function simulate(draggable: Element, droppable: Element): void {
+  export function simulate(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig): void {
+    const {dragX, dragY, dropX, dropY} = calculateMousePositions(draggable, droppable, dndSimulateConfig);
+
     const store = new DragDataStore();
     // For the dragstart event. New data can be added to the drag data store.
     store.mode = "readwrite";
 
     const dataTransfer = new DataTransfer(store);
 
-    const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer);
+    const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer, 0, 0, 0, dragX, dragY, false, false, false, false, 0, null);
     draggable.dispatchEvent(dragstartEvent);
 
     // For the drop event. The list of items representing dragged data can be
@@ -19,7 +25,7 @@ namespace dnd {
     const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
     droppable.dispatchEvent(dragOverEvent);
 
-    const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
+    const dropEvent = createEventWithDataTransfer("drop", dataTransfer, 0, 0, 0, dropX, dropY, false, false, false, false, 0, null);
     droppable.dispatchEvent(dropEvent);
 
     // For all other events. The formats and kinds in the drag data store list
@@ -31,13 +37,53 @@ namespace dnd {
     draggable.dispatchEvent(dragendEvent);
   }
 
+  export interface MousePositions {
+    dragX: number;
+    dragY: number;
+    dropX: number;
+    dropY: number;
+  }
+
+  /**
+   * Calculate the mouse position for drag and drop operations
+   */
+  function calculateMousePositions(draggable: Element, droppable: Element, dndSimulateConfig: DndSimulateConfig): MousePositions {
+    const dragElementPosition = draggable.getBoundingClientRect();
+    const dropElementPosition = droppable.getBoundingClientRect();
+
+    let dragX = dragElementPosition.left;
+    let dragY = dragElementPosition.top;
+
+    let dropX = dropElementPosition.left;
+    let dropY = dropElementPosition.top;
+
+    if (dndSimulateConfig && dndSimulateConfig.dragOffset) {
+      dragX += dndSimulateConfig.dragOffset[0];
+      dragY += dndSimulateConfig.dragOffset[1];
+    }
+    else {
+      dragX += (dragElementPosition.width / 2);
+      dragY += (dragElementPosition.height / 2);
+    }
+
+    if (dndSimulateConfig && dndSimulateConfig.dropOffset) {
+      dropX += dndSimulateConfig.dropOffset[0];
+      dropY += dndSimulateConfig.dropOffset[1];
+    }
+    else {
+      dropX += (dropElementPosition.width / 2);
+      dropY += (dropElementPosition.height / 2);
+    }
+
+    return {dragX, dragY, dropX, dropY};
+  }
 
   /**
    * Creates an event instance with a DataTransfer.
    */
-  function createEventWithDataTransfer(type: string, dataTransfer: DataTransfer): DragEvent {
-    const event = <any> document.createEvent("CustomEvent");
-    event.initCustomEvent(type, true, true, null);
+  function createEventWithDataTransfer(type: string, dataTransfer: DataTransfer, ...eventData: any[]): DragEvent {
+    const event = <any>document.createEvent("MouseEvent");
+    event.initMouseEvent(type, true, true, window, ...eventData);
     event.dataTransfer = dataTransfer;
     return event;
   }
@@ -61,7 +107,7 @@ namespace dnd {
    * @see https://html.spec.whatwg.org/multipage/interaction.html#datatransferitem
    */
   export class DataTransfer {
-    constructor(private store: DragDataStore) {}
+    constructor(private store: DragDataStore) { }
 
 
     /**
@@ -268,23 +314,23 @@ namespace dnd {
    * @see DataTransfer#dropEffect
    */
   type DropEffect = "none"
-                  | "copy"
-                  | "link"
-                  | "move";
+    | "copy"
+    | "link"
+    | "move";
 
 
   /**
    * @see DataTransfer#effectAllowed
    */
   type EffectAllowed = "none"
-                     | "copy"
-                     | "copyLink"
-                     | "copyMove"
-                     | "link"
-                     | "linkMove"
-                     | "move"
-                     | "all"
-                     | "uninitialized";
+    | "copy"
+    | "copyLink"
+    | "copyMove"
+    | "link"
+    | "linkMove"
+    | "move"
+    | "all"
+    | "uninitialized";
 
 
   /**
@@ -324,7 +370,7 @@ namespace dnd {
    * @see https://html.spec.whatwg.org/multipage/interaction.html#datatransferitemlist
    */
   export class DataTransferItemList {
-    constructor(private store: DragDataStore) {}
+    constructor(private store: DragDataStore) { }
 
 
     /**
@@ -439,7 +485,7 @@ namespace dnd {
 
     private syncInternal(): void {
       for (let i = 0; i < this.length; i++) {
-          delete this[i];
+        delete this[i];
       }
 
       this.items.forEach((item, j) => {
@@ -449,8 +495,6 @@ namespace dnd {
       this.length = this.items.length;
     }
   }
-
-
 
   /**
    * While the DataTransferItem object's DataTransfer object is associated with
@@ -469,7 +513,7 @@ namespace dnd {
    */
   class DataTransferItem {
     constructor(private data: File | string, kind: DataTransferItemKind,
-                typeLowerCase: string, private store: DragDataStore) {
+      typeLowerCase: string, private store: DragDataStore) {
       this.type = typeLowerCase;
       this.kind = kind;
     }
@@ -519,7 +563,7 @@ namespace dnd {
       // Otherwise, queue a task to invoke callback, passing the actual data of
       // the item represented by the DataTransferItem object as the argument.
       setTimeout(() => {
-        callback(<string> this.data);
+        callback(<string>this.data);
       }, 0);
     }
 
@@ -539,12 +583,12 @@ namespace dnd {
 
       // Return a new File object representing the actual data of the item
       // represented by the DataTransferItem object.
-      return <File> this.data;
+      return <File>this.data;
     }
 
 
     static createForString(data: string, type: string,
-                           store: DragDataStore): DataTransferItem {
+      store: DragDataStore): DataTransferItem {
       return new DataTransferItem(data, "string", type, store);
     }
 
@@ -604,7 +648,7 @@ namespace dnd {
     textUriList = textUriList.replace(/\r\n$/, "");
 
     if (textUriList === "") {
-      return <string[]> [];
+      return <string[]>[];
     }
 
     return textUriList.split(/\r\n/).filter((line) => {
@@ -618,5 +662,5 @@ namespace dnd {
       // limitations.
       return line[0] !== "#";
     });
-  };
+  }
 }
