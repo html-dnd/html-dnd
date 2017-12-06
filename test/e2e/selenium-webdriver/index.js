@@ -3,7 +3,7 @@ var webdriver = require('selenium-webdriver');
 var By = webdriver.By;
 
 var TEST_PAGE_URL = 'https://kuniwak.github.io/html-dnd/test.html';
-var SAUCELABS_URL = 'http://127.0.0.1:4444/wd/hub';
+var SAUCELABS_URL = 'http://ondemand.saucelabs.com:80/wd/hub';
 
 var util = require('util');
 var lodash = require('lodash');
@@ -13,15 +13,6 @@ var describe = testing.describe;
 var before = testing.before;
 var after = testing.after;
 var it = testing.it;
-
-var Fs = require('fs');
-var Path = require('path');
-
-function useXPathPolyfill(driver) {
-  var WGXPATH_INSTALLER_PATH = Path.resolve(__dirname, '../assets/wgxpath.install.1.3.0.js');
-  driver.executeScript(Fs.readFileSync(WGXPATH_INSTALLER_PATH, 'utf8'));
-  driver.executeScript('wgxpath.install();');
-}
 
 require('dotenv').config({silent: true});
 
@@ -38,7 +29,7 @@ var Capabilities = [
   },
   {
     browserName: 'firefox',
-
+    platform: 'Linux'
   },
   {
     browserName: 'safari',
@@ -125,9 +116,6 @@ describe('html-dnd', function() {
         it('should can drag and drop', function() {
           driver.get(TEST_PAGE_URL);
 
-          if ((capability.browserName.includes('internet explorer')) || (capability.browserName.includes('microsoftedge'))) {
-              useXPathPolyfill(driver);
-          }
           return webdriver.promise
             .all([
               driver.executeScript(
