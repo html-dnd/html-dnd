@@ -3,7 +3,7 @@ var webdriver = require('selenium-webdriver');
 var By = webdriver.By;
 
 var TEST_PAGE_URL = 'https://kuniwak.github.io/html-dnd/test.html';
-var SAUCELABS_URL = 'http://ondemand.saucelabs.com:80/wd/hub';
+var SAUCELABS_URL = 'http://127.0.0.1:4444/wd/hub';
 
 var util = require('util');
 var lodash = require('lodash');
@@ -38,7 +38,7 @@ var Capabilities = [
   },
   {
     browserName: 'firefox',
-    platform: 'Linux'
+
   },
   {
     browserName: 'safari',
@@ -120,13 +120,14 @@ describe('html-dnd', function() {
             });
         });
       });
-      
+
       describe('.codeForSelectors with 2 XPath Selectors', function() {
         it('should can drag and drop', function() {
           driver.get(TEST_PAGE_URL);
 
-          useXPathPolyfill(driver);
-
+          if ((capability.browserName.includes('internet explorer')) || (capability.browserName.includes('microsoftedge'))) {
+              useXPathPolyfill(driver);
+          }
           return webdriver.promise
             .all([
               driver.executeScript(
