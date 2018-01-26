@@ -1,6 +1,6 @@
 {
   "name": "xl-html-dnd",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "HTML Drag and Drop Simulator for E2E testing",
   "keywords": [
     "drag",
@@ -58,7 +58,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kuniwak/html-dnd.git"
+    "url": "git@github.com:acierto/html-dnd.git"
   },
   "bugs": {
     "url": "https://github.com/Kuniwak/html-dnd/issues"

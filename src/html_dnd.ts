@@ -1,7 +1,7 @@
 namespace dnd {
   "use strict";
 
-  export function simulate(draggable: Element, droppable: Element, dispatchTimeout: number = 500): void {
+  export function simulate(draggable: Element, droppable: Element, dispatchTimeout: number = 1000): void {
     const store = new DragDataStore();
     // For the dragstart event. New data can be added to the drag data store.
     store.mode = "readwrite";
