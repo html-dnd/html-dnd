@@ -58,7 +58,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:acierto/html-dnd.git"
+    "url": "git+https://github.com/Kuniwak/html-dnd.git"
   },
   "bugs": {
     "url": "https://github.com/Kuniwak/html-dnd/issues"
