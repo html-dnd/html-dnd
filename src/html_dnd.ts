@@ -19,19 +19,19 @@ namespace dnd {
       setTimeout(() => {
         // For the drop event. The list of items representing dragged data can be
         // read, including the data. No new data can be added.
-  
+
         const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
         droppable.dispatchEvent(dragOverEvent);
-  
+
         setTimeout(() => {
           const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
           droppable.dispatchEvent(dropEvent);
-  
+
           // For all other events. The formats and kinds in the drag data store list
           // of items representing dragged data can be enumerated, but the data itself
           // is unavailable and no new data can be added.
           store.mode = "protected";
-  
+
           setTimeout(() => {
             const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
             draggable.dispatchEvent(dragendEvent);
@@ -70,7 +70,8 @@ namespace dnd {
    * @see https://html.spec.whatwg.org/multipage/interaction.html#datatransferitem
    */
   export class DataTransfer {
-    constructor(private store: DragDataStore) {}
+    constructor(private store: DragDataStore) {
+    }
 
 
     /**
@@ -277,23 +278,23 @@ namespace dnd {
    * @see DataTransfer#dropEffect
    */
   type DropEffect = "none"
-                  | "copy"
-                  | "link"
-                  | "move";
+    | "copy"
+    | "link"
+    | "move";
 
 
   /**
    * @see DataTransfer#effectAllowed
    */
   type EffectAllowed = "none"
-                     | "copy"
-                     | "copyLink"
-                     | "copyMove"
-                     | "link"
-                     | "linkMove"
-                     | "move"
-                     | "all"
-                     | "uninitialized";
+    | "copy"
+    | "copyLink"
+    | "copyMove"
+    | "link"
+    | "linkMove"
+    | "move"
+    | "all"
+    | "uninitialized";
 
 
   /**
@@ -308,7 +309,6 @@ namespace dnd {
       return null;
     }
   }
-
 
 
   /**
@@ -327,13 +327,13 @@ namespace dnd {
   type DragDataStoreMode = "readwrite" | "readonly" | "protected";
 
 
-
   /**
    * Each DataTransfer object is associated with a DataTransferItemList object.
    * @see https://html.spec.whatwg.org/multipage/interaction.html#datatransferitemlist
    */
   export class DataTransferItemList {
-    constructor(private store: DragDataStore) {}
+    constructor(private store: DragDataStore) {
+    }
 
 
     /**
@@ -448,7 +448,7 @@ namespace dnd {
 
     private syncInternal(): void {
       for (let i = 0; i < this.length; i++) {
-          delete this[i];
+        delete this[i];
       }
 
       this.items.forEach((item, j) => {
@@ -458,7 +458,6 @@ namespace dnd {
       this.length = this.items.length;
     }
   }
-
 
 
   /**
