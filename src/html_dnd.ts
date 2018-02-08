@@ -1,7 +1,7 @@
 namespace dnd {
   "use strict";
 
-  export function simulate(draggable: Element, droppable: Element, dispatchTimeout: number = 400): void {
+  export function simulate(draggable: Element, droppable: Element, dispatchTimeout: number): void {
     const store = new DragDataStore();
     // For the dragstart event. New data can be added to the drag data store.
     store.mode = "readwrite";
@@ -11,34 +11,60 @@ namespace dnd {
     const dragstartEvent = createEventWithDataTransfer("dragstart", dataTransfer);
     draggable.dispatchEvent(dragstartEvent);
 
-    setTimeout(() => {
+    const doDragEnter = () => {
       // Simulate dragenter
       store.mode = "readonly";
       const dragEnterEvent = createEventWithDataTransfer("dragenter", dataTransfer);
       droppable.dispatchEvent(dragEnterEvent);
-      setTimeout(() => {
-        // For the drop event. The list of items representing dragged data can be
-        // read, including the data. No new data can be added.
+    };
 
-        const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
-        droppable.dispatchEvent(dragOverEvent);
+    const doDragOver = () => {
+      // For the drop event. The list of items representing dragged data can be
+      // read, including the data. No new data can be added.
+
+      const dragOverEvent = createEventWithDataTransfer("dragover", dataTransfer);
+      droppable.dispatchEvent(dragOverEvent);
+    };
+
+    const doDrop = () => {
+      const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
+      droppable.dispatchEvent(dropEvent);
+
+      // For all other events. The formats and kinds in the drag data store list
+      // of items representing dragged data can be enumerated, but the data itself
+      // is unavailable and no new data can be added.
+      store.mode = "protected";
+    };
+
+    const doDragEnd = () => {
+      const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
+      draggable.dispatchEvent(dragendEvent);
+    };
+
+    if (dispatchTimeout) {
+      setTimeout(() => {
+        doDragEnter();
 
         setTimeout(() => {
-          const dropEvent = createEventWithDataTransfer("drop", dataTransfer);
-          droppable.dispatchEvent(dropEvent);
-
-          // For all other events. The formats and kinds in the drag data store list
-          // of items representing dragged data can be enumerated, but the data itself
-          // is unavailable and no new data can be added.
-          store.mode = "protected";
+          doDragOver();
 
           setTimeout(() => {
-            const dragendEvent = createEventWithDataTransfer("dragend", dataTransfer);
-            draggable.dispatchEvent(dragendEvent);
+            doDrop();
+
+            setTimeout(() => {
+              doDragEnd();
+            }, dispatchTimeout);
           }, dispatchTimeout);
         }, dispatchTimeout);
       }, dispatchTimeout);
-    }, dispatchTimeout);
+      // Sleep to allow for the 4 events to occur before expecting any results.
+      sleep(dispatchTimeout * 4);
+    } else {
+      doDragEnter();
+      doDragOver();
+      doDrop();
+      doDragEnd();
+    }
   }
 
   /**
@@ -51,6 +77,13 @@ namespace dnd {
     return event;
   }
 
+  /**
+   * Allows to sleep for a specific time.
+   */
+  function sleep(delay: number): void {
+    const start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+  }
 
   type EventType = 'dragstart'
     | 'drag'
