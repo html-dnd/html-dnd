@@ -39,6 +39,9 @@ namespace dnd {
         }, dispatchTimeout);
       }, dispatchTimeout);
     }, dispatchTimeout);
+
+    // Sleep to allow for the 4 events to occur before expecting any results.
+    sleep(dispatchTimeout*4 + 300);
   }
 
   /**
@@ -51,6 +54,15 @@ namespace dnd {
     return event;
   }
 
+  /**
+   * Allows to sleep for a specific time.
+   */
+  function sleep(millis: Number){
+    const dateTime : any = new Date();
+    let currentDateTime : any = null;
+    do { currentDateTime = new Date(); }
+    while(currentDateTime - dateTime < millis);
+  }
 
   type EventType = 'dragstart'
     | 'drag'
