@@ -41,7 +41,7 @@ namespace dnd {
     }, dispatchTimeout);
 
     // Sleep to allow for the 4 events to occur before expecting any results.
-    sleep(dispatchTimeout*4 + 300);
+    sleep(dispatchTimeout * 4 + 300);
   }
 
   /**
@@ -57,11 +57,11 @@ namespace dnd {
   /**
    * Allows to sleep for a specific time.
    */
-  function sleep(millis: Number){
+  function sleep(ms: Number): void {
     const dateTime : any = new Date();
     let currentDateTime : any = null;
     do { currentDateTime = new Date(); }
-    while(currentDateTime - dateTime < millis);
+    while (currentDateTime - dateTime < ms);
   }
 
   type EventType = 'dragstart'
