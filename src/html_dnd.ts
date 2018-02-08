@@ -58,7 +58,7 @@ namespace dnd {
         }, dispatchTimeout);
       }, dispatchTimeout);
       // Sleep to allow for the 4 events to occur before expecting any results.
-      sleep(dispatchTimeout * 4 + 1000);
+      sleep(dispatchTimeout * 4);
     } else {
       doDragEnter();
       doDragOver();
