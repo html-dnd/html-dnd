@@ -8,5 +8,14 @@ module.exports = {
       .execute(dragAndDrop, ['//*[@id="draggable"]', '//*[@id="droppable"]'])
       .assert.containsText('#result', 'OK')
       .end();
+  },
+  'Drag and Drop with Nightwatch using XPath - with dispatchTimeout': function(browser) {
+    browser
+      .url('https://kuniwak.github.io/html-dnd/test.html')
+      .assert.containsText('#result', 'NG')
+      .execute(dragAndDrop, ['//*[@id="draggable"]', '//*[@id="droppable"]', 400])
+      .pause(2000)
+      .assert.containsText('#result', 'OK')
+      .end();
   }
 };
