@@ -3,7 +3,7 @@
 // Definitions by: Adrien Vergé <https://github.com/adrienverge>
 
 declare module 'html-dnd' {
-    var htmlDnd: {
+    const htmlDnd: {
         code: string,
         codeForSelectors: string,
     };

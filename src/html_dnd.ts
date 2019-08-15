@@ -3,9 +3,8 @@ namespace dnd {
 
 
   export function simulate(draggable: Element, droppable: Element): void {
-    const store = new DragDataStore();
     // For the dragstart event. New data can be added to the drag data store.
-    store.mode = "readwrite";
+    const store = new DragDataStore("readwrite");
 
     const dataTransfer = new DataTransfer(store);
 
@@ -35,7 +34,7 @@ namespace dnd {
   /**
    * Creates an event instance with a DataTransfer.
    */
-  function createEventWithDataTransfer(type: string, dataTransfer: DataTransfer): DragEvent {
+  function createEventWithDataTransfer(type: EventType, dataTransfer: DataTransfer): DragEvent {
     const event = <any> document.createEvent("CustomEvent");
     event.initCustomEvent(type, true, true, null);
     event.dataTransfer = dataTransfer;
@@ -61,7 +60,9 @@ namespace dnd {
    * @see https://html.spec.whatwg.org/multipage/interaction.html#datatransferitem
    */
   export class DataTransfer {
-    constructor(private store: DragDataStore) {}
+    constructor(private store: DragDataStore) {
+      this.items = new DataTransferItemList(store)
+    }
 
 
     /**
@@ -79,7 +80,7 @@ namespace dnd {
      *
      * The possible values are "none", "copy", "link", and "move".
      */
-    dropEffect: DropEffect;
+    dropEffect: DropEffect = "none";
 
 
     /**
@@ -295,7 +296,7 @@ namespace dnd {
 
 
     // NOTE: This implementation can represent only empty FileList.
-    item(index: number): File {
+    item(index: number): File|null {
       return null;
     }
   }
@@ -308,7 +309,7 @@ namespace dnd {
    *
    */
   class DragDataStore {
-    mode: DragDataStoreMode;
+    constructor(public mode: DragDataStoreMode) {}
   }
 
 
@@ -395,7 +396,7 @@ namespace dnd {
      */
     add(data: File): void;
     add(data: string, type: string): void;
-    add(data: any, type?: any): void {
+    add(data: any, type?: any): void|null {
       // If the DataTransferItemList object is not in the read/write mode,
       // return null and abort these steps.
       if (this.store.mode !== "readwrite") {
@@ -500,7 +501,7 @@ namespace dnd {
 
     getAsString(callback: (data: string) => void): void {
       // If the callback is null, abort these steps.
-      if (callback) {
+      if (!callback) {
         return;
       }
 
@@ -519,12 +520,12 @@ namespace dnd {
       // Otherwise, queue a task to invoke callback, passing the actual data of
       // the item represented by the DataTransferItem object as the argument.
       setTimeout(() => {
-        callback(<string> this.data);
+        callback(this.data as string);
       }, 0);
     }
 
 
-    getAsFile(): File {
+    getAsFile(): File|null {
       // If the DataTransferItem object is not in the read/write mode or the
       // read-only mode, return null and abort these steps.
       if (this.store.mode !== "readwrite") {
@@ -550,7 +551,7 @@ namespace dnd {
 
 
     static createForFile(data: File, store: DragDataStore): DataTransferItem {
-      return new DataTransferItem(data, "file", null, store);
+      return new DataTransferItem(data, "file", "file", store);
     }
   }
 
@@ -618,5 +619,5 @@ namespace dnd {
       // limitations.
       return line[0] !== "#";
     });
-  };
+  }
 }
