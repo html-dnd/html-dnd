@@ -8,11 +8,6 @@ var SAUCELABS_URL = 'http://ondemand.saucelabs.com:80/wd/hub';
 var util = require('util');
 var lodash = require('lodash');
 var assert = require('chai').assert;
-var testing = require('selenium-webdriver/testing');
-var describe = testing.describe;
-var before = testing.before;
-var after = testing.after;
-var it = testing.it;
 
 var Fs = require('fs');
 var Path = require('path');
@@ -51,11 +46,6 @@ var Capabilities = [
   {
     browserName: 'internet explorer',
     platform: 'Windows 8.1'
-  },
-  {
-    browserName: 'internet explorer',
-    platform: 'Windows 7',
-    version: '9.0'
   }
 ].map(function(capability) {
   return lodash.extend({}, BASE_CAPABILITY, capability);
