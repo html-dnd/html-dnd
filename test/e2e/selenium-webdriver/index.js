@@ -8,6 +8,7 @@ var SAUCELABS_URL = 'http://ondemand.saucelabs.com:80/wd/hub';
 var util = require('util');
 var lodash = require('lodash');
 var assert = require('chai').assert;
+var testing = require('selenium-webdriver/testing');
 
 var Fs = require('fs');
 var Path = require('path');
@@ -51,90 +52,92 @@ var Capabilities = [
   return lodash.extend({}, BASE_CAPABILITY, capability);
 });
 
-describe('html-dnd', function() {
-  Capabilities.forEach(function(capability) {
-    var testCaseName = util.format(
-      'on %s %s (%s)',
-      capability.browserName,
-      capability.version || 'latest',
-      capability.platform
-    );
+testing.suite(function(env) {
+  describe('html-dnd', function() {
+    Capabilities.forEach(function(capability) {
+      var testCaseName = util.format(
+          'on %s %s (%s)',
+          capability.browserName,
+          capability.version || 'latest',
+          capability.platform
+      );
 
-    describe(testCaseName, function() {
-      var driver;
+      describe(testCaseName, function() {
+        var driver;
 
-      before(function() {
-        driver = new webdriver.Builder()
-          .usingServer(SAUCELABS_URL)
-          .withCapabilities(capability)
-          .build();
-      });
+        before(function() {
+          driver = env.builder()
+              .usingServer(SAUCELABS_URL)
+              .withCapabilities(capability)
+              .build();
+        });
 
-      describe('.code', function() {
-        it('should can drag and drop with 2 WebElements', function() {
-          driver.get(TEST_PAGE_URL);
+        describe('.code', function() {
+          it('should can drag and drop with 2 WebElements', function() {
+            driver.get(TEST_PAGE_URL);
 
-          var draggable = driver.findElement(By.id('draggable'));
-          var droppable = driver.findElement(By.id('droppable'));
+            var draggable = driver.findElement(By.id('draggable'));
+            var droppable = driver.findElement(By.id('droppable'));
 
-          return webdriver.promise.all([
+            return webdriver.promise.all([
               driver.executeScript(dragAndDrop.code, draggable, droppable),
               driver.findElement(By.id('result')).getText()
             ])
-            .then(function(tuple) {
-              var result = tuple[0];
-              assert.isNull(result);
+                .then(function(tuple) {
+                  var result = tuple[0];
+                  assert.isNull(result);
 
-              var text = tuple[1];
-              assert.strictEqual(text, 'OK');
-            });
+                  var text = tuple[1];
+                  assert.strictEqual(text, 'OK');
+                });
+          });
         });
-      });
 
-      describe('.codeForSelectors with 2 CSS Selectors', function() {
-        it('should can drag and drop', function() {
-          driver.get(TEST_PAGE_URL);
+        describe('.codeForSelectors with 2 CSS Selectors', function() {
+          it('should can drag and drop', function() {
+            driver.get(TEST_PAGE_URL);
 
-          return webdriver.promise
-            .all([
-              driver.executeScript(
-                dragAndDrop.codeForSelectors, '#draggable', '#droppable'),
-              driver.findElement(By.id('result')).getText()
-            ])
-            .then(function(tuple) {
-              var result = tuple[0];
-              assert.isNull(result);
+            return webdriver.promise
+                .all([
+                  driver.executeScript(
+                      dragAndDrop.codeForSelectors, '#draggable', '#droppable'),
+                  driver.findElement(By.id('result')).getText()
+                ])
+                .then(function(tuple) {
+                  var result = tuple[0];
+                  assert.isNull(result);
 
-              var text = tuple[1];
-              assert.strictEqual(text, 'OK');
-            });
+                  var text = tuple[1];
+                  assert.strictEqual(text, 'OK');
+                });
+          });
         });
-      });
-      
-      describe('.codeForSelectors with 2 XPath Selectors', function() {
-        it('should can drag and drop', function() {
-          driver.get(TEST_PAGE_URL);
 
-          useXPathPolyfill(driver);
+        describe('.codeForSelectors with 2 XPath Selectors', function() {
+          it('should can drag and drop', function() {
+            driver.get(TEST_PAGE_URL);
 
-          return webdriver.promise
-            .all([
-              driver.executeScript(
-                dragAndDrop.codeForXPaths, '//*[@id="draggable"]', '//*[@id="droppable"]'),
-              driver.findElement(By.id('result')).getText()
-            ])
-            .then(function(tuple) {
-              var result = tuple[0];
-              assert.isNull(result);
+            useXPathPolyfill(driver);
 
-              var text = tuple[1];
-              assert.strictEqual(text, 'OK');
-            });
+            return webdriver.promise
+                .all([
+                  driver.executeScript(
+                      dragAndDrop.codeForXPaths, '//*[@id="draggable"]', '//*[@id="droppable"]'),
+                  driver.findElement(By.id('result')).getText()
+                ])
+                .then(function(tuple) {
+                  var result = tuple[0];
+                  assert.isNull(result);
+
+                  var text = tuple[1];
+                  assert.strictEqual(text, 'OK');
+                });
+          });
         });
-      });
 
-      after(function() {
-        return driver.quit();
+        after(function() {
+          return driver.quit();
+        });
       });
     });
   });
