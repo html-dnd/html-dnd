@@ -25,6 +25,22 @@ Compatibility
 
 Usage
 -----
+The first two arguments are required and are the `draggable` and `droppable` elements or reference to elements depends on the library the script runs in. see examples below.
+
+The third argument is `dndSimulateConfig` and it is mandatory.
+It includes two mandatory configs: `dragOffset` and `dropOffset`.
+If present, they will offset the mouse by the specified position at the relevant DND events.
+Otherwise, the mouse will be centered for the omitted configs.
+
+Both of the configs expect an array with the size of 2 that determines offset `left` and `top` from the top and left of the relevant elements.
+
+```
+var dndSimulateConfig = {
+  dragOffset: [100, 200],
+  dropOffset: [20, 30]
+};
+```
+
 ### For selenium-webdriver
 
 ```javascript
@@ -41,25 +57,14 @@ driver.get('http://example.com');
 var draggable = driver.findElement(By.id('draggable'));
 var droppable = driver.findElement(By.id('droppable'));
 
-driver.executeScript(dragAndDrop, draggable, droppable);
+var dndSimulateConfig = {
+  dragOffset: [100, 200],
+  dropOffset: [20, 30]
+};
+
+driver.executeScript(dragAndDrop, draggable, droppable, dndSimulateConfig);
 
 driver.quit();
-```
-
-
-### For Nightwatch.js
-
-```javascript
-var dragAndDrop = require('html-dnd').codeForSelectors;
-
-module.exports = {
-  'drag and drop': function(browser) {
-    browser
-      .url('http://example.com')
-      .execute(dragAndDrop, ['#draggable', '#droppable'])
-      .end();
-  }
-};
 ```
 
 
@@ -74,17 +79,42 @@ var client = webdriverio.remote(options);
 client
   .init()
   .url('http://example.com')
-  .execute(dragAndDrop, '#draggable', '#droppable');
+  .execute(dragAndDrop, '#draggable', '#droppable')
   .end();
+```
+
+
+### For Nightwatch.js
+
+```javascript
+var dragAndDrop = require('html-dnd').codeForSelectors;
+
+module.exports = {
+  'drag and drop': function(browser) {
+    
+    var dndSimulateConfig = {
+      dragOffset: [20, 30]
+    };
+    
+    browser
+      .url('http://example.com')
+      .execute(dragAndDrop, ['#draggable', '#droppable', dndSimulateConfig])
+      .end();
+  }
+};
 ```
 
 
 ### With Typescript
 
 ```typescript
-import {code as dragAndDrop} from 'html-dnd';
+import {code as dragAndDrop, DndSimulateConfig} from 'html-dnd';
 
-driver.executeScript(dragAndDrop, draggable, droppable);
+var dndSimulateConfig: DndSimulateConfig = {
+  dropOffset: [20, 20]
+};
+
+driver.executeScript(dragAndDrop, draggable, droppable, dndSimulateConfig);
 ```
 
 

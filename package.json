@@ -50,9 +50,6 @@
   },
   "author": "Kuniwak",
   "license": "MIT",
-  "dependencies": {
-    "multiline": "^1.0.2"
-  },
   "directories": {
     "test": "test"
   },
