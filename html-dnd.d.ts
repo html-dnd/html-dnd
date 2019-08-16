@@ -1,11 +1,7 @@
 // Type definitions for html-dnd
 // Project: https://github.com/Kuniwak/html-dnd
-// Definitions by: Adrien Vergé <https://github.com/adrienverge>
+// Definitions by: Ivan Zub <https://github.com/zubivan>
 
-declare module 'html-dnd' {
-    var htmlDnd: {
-        code: string,
-        codeForSelectors: string,
-    };
-    export = htmlDnd;
-}
+export function code(): string | Function;
+export function codeForSelectors(): string | Function;
+export function codeForXPaths(): string | Function;
