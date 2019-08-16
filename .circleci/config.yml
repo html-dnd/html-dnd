@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run:
+          name: 'Install Dependencies'
+          command: 'npm install'
+      - run:
+          name: 'Test'
+          command: 'npm test'
