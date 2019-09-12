@@ -7,5 +7,6 @@ declare module 'html-dnd' {
         code: string,
         codeForSelectors: string,
     };
+
     export = htmlDnd;
 }
