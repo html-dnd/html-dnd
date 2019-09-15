@@ -1,9 +1,7 @@
 /* eslint-env node */
-require('dotenv').config({silent: true});
-
 module.exports = function(config) {
   // Example set of browsers to run on Sauce Labs
-  // Check out https://saucelabs.com/platforms for all browser/platform combos
+  // Check out https://saucelabs.com/platforms for all browser/platformName combos
   var customLaunchers = {
     'SL_Chrome': {
       base: 'SauceLabs',
