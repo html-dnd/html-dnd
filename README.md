@@ -88,6 +88,16 @@ driver.executeScript(dragAndDrop, draggable, droppable);
 ```
 
 
+### Only Hover
+
+In some scenarios a drag operation is not beeing ended with a drop, but rather reveals an element upon hovering above a trigger. If you only want to do a hover you can do so via
+
+```typescript
+import {code as dragAndDrop} from 'html-dnd';
+
+driver.executeScript(dragAndDrop, draggable, droppable, {onlyHover:true, hoverTime:1000});
+```
+
 See also
 --------
 
